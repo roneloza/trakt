@@ -20,6 +20,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="Tj0-Ch-uEP" kind="relationship" relationship="viewControllers" id="ZMj-Kw-wkQ"/>
+                        <segue destination="FQC-Td-ZvI" kind="relationship" relationship="viewControllers" id="yFo-SY-6im"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PFL-Zw-Zwh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -35,6 +36,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T9G-lJ-FGb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-521" y="-334"/>
+        </scene>
+        <!--SearchMostPopularMovies-->
+        <scene sceneID="USF-eg-kmo">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SearchMostPopularMovies" id="FQC-Td-ZvI" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" systemItem="search" id="WJZ-Y4-NlN"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2lw-ah-5Yu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-491" y="-287"/>
         </scene>
     </scenes>
 </document>

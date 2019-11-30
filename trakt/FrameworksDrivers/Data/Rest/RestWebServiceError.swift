@@ -24,13 +24,5 @@ enum RestWebServiceStatusCode: Int {
 }
 
 class RestWebServiceError: CustomError {
-    
-    convenience init(title: String?, message: String?, code: Int?, data: Data?) {
-    
-        let deserialize: SerializerClient = SerializerJSONClient()
-        
-        let responseError = deserialize.decode(data: data, class: ResponseError.self)
-        
-        self.init(title: title, message: responseError?.message, code: code)
-    }
+
 }

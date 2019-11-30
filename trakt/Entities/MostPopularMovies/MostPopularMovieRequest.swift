@@ -14,27 +14,48 @@ class MostPopularMovieRestWebServiceRequest: RestWebServiceRequest {
     let method: RestWebServiceRequestMethod = .GET
     
     var page: Int
+    var query: String = ""
+    
     private let limit: Int
     
     var queryString: [String : String]? {
         
-        return ["page": self.page.description,
-                "limit": self.limit.description]
+        if self.query.count > 0 {
+            
+            return ["page": self.page.description,
+                    "limit": self.limit.description,
+                    "query": self.query]
+        }
+        else {
+         
+            return ["page": self.page.description,
+                    "limit": self.limit.description]
+        }
     }
     
-    internal init(page: Int, limit: Int = 10) {
+    internal init(page: Int, limit: Int = 10, query: String = "") {
         
         self.page = page
         self.limit = limit
+        self.query = query
     }
 }
 
 class MostPopularMovieRequest: NSObject {
     
-    internal init(page: Int,  limit: Int = 10) {
+    internal init(page: Int,  limit: Int = 10, query: String = "") {
         
         self.page = page
         self.limit = limit
+        self.query = query
+    }
+    
+    var query: String {
+        
+        willSet(myNewValue) {
+            
+            self.request.query = myNewValue
+        }
     }
     
     var page: Int {
@@ -49,6 +70,6 @@ class MostPopularMovieRequest: NSObject {
     
     lazy var request = {
        
-        return MostPopularMovieRestWebServiceRequest(page: self.page, limit: self.limit)
+        return MostPopularMovieRestWebServiceRequest(page: self.page, limit: self.limit, query: self.query)
     }()
 }

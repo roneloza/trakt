@@ -9,15 +9,18 @@
 import UIKit
 import SDWebImage
 
-class MostPopularMoviesViewController: BaseViewController, ProgressLoaderController, AlertableController, DispatcherController {
-
+class SearchMostPopularMoviesViewController: BaseViewController, ProgressLoaderController, AlertableController, DispatcherController {
+    
     private lazy var data: [MostPopularMovieViewModel]? = [MostPopularMovieViewModel]()
     
     @IBOutlet weak var mostPopularMoviesTableView: UITableView?
+    @IBOutlet weak var searchBar: UISearchBar?
+    private var searchActive : Bool = false
+    private var searchQuery : String = ""
     
-    private lazy var mostPopularMoviesUseCase : MostPopularMoviesUseCaseInput = MostPopularMoviesUseCase(output: self.presenter)
+    private lazy var mostPopularMoviesUseCase : MostPopularMoviesUseCaseInput = MostPopularMoviesUseCase(output: self.mostPopularMoviesPresenter)
     
-    private lazy var presenter: MostPopularMoviesPresenterInput = MostPopularMoviesPresenter(output: self)
+    private lazy var mostPopularMoviesPresenter: MostPopularMoviesPresenterInput = MostPopularMoviesPresenter(output: self)
     
     private lazy var mostPopularMovieRequest = MostPopularMovieRequest(page: 1)
     
@@ -33,11 +36,10 @@ class MostPopularMoviesViewController: BaseViewController, ProgressLoaderControl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         
         self.setupTableView()
-        self.loadData(query: "")
     }
     
     // MARK: - UI -
@@ -59,7 +61,7 @@ class MostPopularMoviesViewController: BaseViewController, ProgressLoaderControl
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate -
-extension MostPopularMoviesViewController: UITableViewDataSource, UITableViewDelegate {
+extension SearchMostPopularMoviesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -102,7 +104,7 @@ extension MostPopularMoviesViewController: UITableViewDataSource, UITableViewDel
     }
 }
 
-extension MostPopularMoviesViewController: MostPopularMoviesPresenterOutput {
+extension SearchMostPopularMoviesViewController: MostPopularMoviesPresenterOutput {
     
     func willPaginateMostPopularMovies() {
         
@@ -156,7 +158,7 @@ extension MostPopularMoviesViewController: MostPopularMoviesPresenterOutput {
         self.dispatchOnMainQueue {  [weak self] in
             
             if let data = data {
-             
+                
                 self?.data = data
                 
                 self?.mostPopularMoviesTableView?.reloadData()
@@ -184,7 +186,7 @@ extension MostPopularMoviesViewController: MostPopularMoviesPresenterOutput {
     
 }
 
-extension MostPopularMoviesViewController: MovieDetailUseCaseOutput {
+extension SearchMostPopularMoviesViewController: MovieDetailUseCaseOutput {
     
     func willGetMovieDetail() {
         
@@ -212,5 +214,38 @@ extension MostPopularMoviesViewController: MovieDetailUseCaseOutput {
     
     func didGetMovieDetail() {
         
+    }
+}
+
+extension SearchMostPopularMoviesViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        
+        searchActive = true;
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        
+        searchActive = false;
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchActive = false;
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchActive = false;
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if (searchText.count >= 3) {
+            
+            self.searchQuery = searchText
+            
+            self.loadData(query: searchText)
+        }
     }
 }

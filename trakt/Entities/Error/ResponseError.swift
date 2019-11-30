@@ -9,21 +9,20 @@
 import UIKit
 
 //"{\"data\":null,\"success\":false,\"message\":\"Sesión expirada, volver a iniciar sesión\"}"
+//"{\"status_code\":34,\"status_message\":\"The resource you requested could not be found.\"}"
 
 class ResponseError: CodableObject {
     
-    internal init(success: Bool?, message: String?) {
-        
-        self.success = success
-        self.message = message
-    }
-    
     let success: Bool?
     let message: String?
+    let statusCode: Int?
+    let statusMessage: String?
     
     enum CodingKeys: String, CodingKey {
         
         case success,
-        message
+        message,
+        statusCode = "status_code",
+        statusMessage = "status_message"
     }
 }

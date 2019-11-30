@@ -10,6 +10,8 @@
 		0835CDFB9CDCBB9AF221950C /* Pods_traktTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB0C5870F5C314A3C415022D /* Pods_traktTests.framework */; };
 		240592271230131BC355E018 /* Pods_trakt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3482381F8F1F435A2C526EBA /* Pods_trakt.framework */; };
 		550DFADF0EF77829829E8272 /* Pods_trakt_traktUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC90FF6E3635A2C0CE300283 /* Pods_trakt_traktUITests.framework */; };
+		8E762AFB2391E3D90084B9D1 /* SearchMostPopularMovies.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E762AFA2391E3D90084B9D1 /* SearchMostPopularMovies.storyboard */; };
+		8E762AFD2391E4320084B9D1 /* SearchMostPopularMoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E762AFC2391E4320084B9D1 /* SearchMostPopularMoviesViewController.swift */; };
 		8E7C895C2390A30E00282E2B /* MovieDetailRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7C895B2390A30E00282E2B /* MovieDetailRepository.swift */; };
 		8E7C89602390A3DA00282E2B /* MovieDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7C895F2390A3DA00282E2B /* MovieDetailRequest.swift */; };
 		8E7C89622390A9C900282E2B /* MovieDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7C89612390A9C900282E2B /* MovieDetailResponse.swift */; };
@@ -74,6 +76,8 @@
 /* Begin PBXFileReference section */
 		3482381F8F1F435A2C526EBA /* Pods_trakt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trakt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E087FB87A928A9AC18E0FA /* Pods-traktTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-traktTests.debug.xcconfig"; path = "Target Support Files/Pods-traktTests/Pods-traktTests.debug.xcconfig"; sourceTree = "<group>"; };
+		8E762AFA2391E3D90084B9D1 /* SearchMostPopularMovies.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SearchMostPopularMovies.storyboard; sourceTree = "<group>"; };
+		8E762AFC2391E4320084B9D1 /* SearchMostPopularMoviesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMostPopularMoviesViewController.swift; sourceTree = "<group>"; };
 		8E7C895B2390A30E00282E2B /* MovieDetailRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailRepository.swift; sourceTree = "<group>"; };
 		8E7C895F2390A3DA00282E2B /* MovieDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailRequest.swift; sourceTree = "<group>"; };
 		8E7C89612390A9C900282E2B /* MovieDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailResponse.swift; sourceTree = "<group>"; };
@@ -384,6 +388,7 @@
 			isa = PBXGroup;
 			children = (
 				8EA297C7238F6295009B5B9B /* MostPopularMovies.storyboard */,
+				8E762AFA2391E3D90084B9D1 /* SearchMostPopularMovies.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -456,6 +461,7 @@
 			isa = PBXGroup;
 			children = (
 				8EEFF7E2238DF10700D827BE /* MostPopularMoviesViewController.swift */,
+				8E762AFC2391E4320084B9D1 /* SearchMostPopularMoviesViewController.swift */,
 			);
 			path = MostPopularMovies;
 			sourceTree = "<group>";
@@ -595,6 +601,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E762AFB2391E3D90084B9D1 /* SearchMostPopularMovies.storyboard in Resources */,
 				8EA297C8238F6295009B5B9B /* MostPopularMovies.storyboard in Resources */,
 				8EEFF761238DE7C400D827BE /* LaunchScreen.storyboard in Resources */,
 				8EEFF75E238DE7C400D827BE /* Assets.xcassets in Resources */,
@@ -759,6 +766,7 @@
 				8EEFF7EC238DF10700D827BE /* CustomTextField.swift in Sources */,
 				8EEFF799238DF0F000D827BE /* ResponseError.swift in Sources */,
 				8EEFF7FF238DF11300D827BE /* MostPopularMoviesUseCase.swift in Sources */,
+				8E762AFD2391E4320084B9D1 /* SearchMostPopularMoviesViewController.swift in Sources */,
 				8EEFF7B4238DF0FA00D827BE /* RestWebServiceRequest.swift in Sources */,
 				8EEFF803238DF15900D827BE /* AppSettings.swift in Sources */,
 				8EEFF7F1238DF10700D827BE /* BaseViewController.swift in Sources */,

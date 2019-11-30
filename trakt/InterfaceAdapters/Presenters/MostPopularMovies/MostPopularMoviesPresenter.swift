@@ -18,6 +18,11 @@ protocol MostPopularMoviesPresenterOutput: class {
     func successGetMostPopularMovies(data: [MostPopularMovieViewModel]?)
     func failGetMostPopularMovies(error: CustomError)
     func didGetMostPopularMovies()
+    
+    func willPaginateMostPopularMovies()
+    func successPaginateMostPopularMovies(data: [MostPopularMovieViewModel]?)
+    func failPaginateMostPopularMovies(error: CustomError)
+    func didPaginateMostPopularMovies()
 }
 
 class MostPopularMoviesPresenter: NSObject {
@@ -30,6 +35,31 @@ class MostPopularMoviesPresenter: NSObject {
 }
 
 extension MostPopularMoviesPresenter: MostPopularMoviesPresenterInput {
+    
+    func willPaginateMostPopularMovies() {
+        
+        self.output?.willPaginateMostPopularMovies()
+    }
+    
+    func successPaginateMostPopularMovies(data: [MostPopularMovieResponse]?) {
+        
+        let movies = data?.compactMap( {
+            
+            MostPopularMovieViewModel(response: $0)
+        })
+        
+        self.output?.successPaginateMostPopularMovies(data: movies)
+    }
+    
+    func failPaginateMostPopularMovies(error: CustomError) {
+        
+        self.output?.failPaginateMostPopularMovies(error: error)
+    }
+    
+    func didPaginateMostPopularMovies() {
+        
+        self.output?.didPaginateMostPopularMovies()
+    }
     
     func willGetMostPopularMovies() {
         

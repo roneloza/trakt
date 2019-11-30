@@ -6,6 +6,8 @@
 //  Copyright © 2019 ENFASYS Consultores e Ingenieros. All rights reserved.
 //
 
+import Foundation
+
 enum CustomErrorEnum: Int {
     case dataIsEmpty = 2000
 }
@@ -15,11 +17,24 @@ class CustomError : LocalizedError {
     let title: String?
     let message: String?
     let code: Int?
+    let data: Data? = nil
     
-    internal init(title: String?, message: String?, code: Int?) {
-        self.title = title
-        self.message = message
-        self.code = code
+    internal init(title: String?, message: String?, code: Int?, data: Data? = nil) {
+        
+        let deserialize: SerializerClient = SerializerJSONClient()
+        
+        if let responseError = deserialize.decode(data: data, class: ResponseError.self) {
+            
+            self.title = title
+            self.message = responseError.statusMessage
+            self.code = responseError.statusCode
+        }
+        else {
+            
+            self.title = title
+            self.message = message
+            self.code = code
+        }
     }
     
     class func emptyData() -> CustomError {
