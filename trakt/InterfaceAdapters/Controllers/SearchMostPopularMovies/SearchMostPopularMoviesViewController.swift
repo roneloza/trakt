@@ -41,6 +41,7 @@ class SearchMostPopularMoviesViewController: BaseViewController, ProgressLoaderC
         
         // Do any additional setup after loading the view.
         
+        self.loadData(query: "")
         self.setupTableView()
     }
     
@@ -135,9 +136,9 @@ extension SearchMostPopularMoviesViewController: SearchMostPopularMoviesPresente
                 
                 self?.data?.append(contentsOf: data)
                 
-                self?.mostPopularMoviesTableView?.reloadData()
-                
                 self?.mostPopularMovieRequest.page = ((self?.mostPopularMovieRequest.page ?? 0) + 1)
+                
+                self?.mostPopularMoviesTableView?.reloadData()
             }
         }
     }
@@ -162,26 +163,18 @@ extension SearchMostPopularMoviesViewController: SearchMostPopularMoviesPresente
                 
                 self?.data = data
                 
-                self?.mostPopularMoviesTableView?.reloadData()
-                
                 self?.mostPopularMovieRequest.page = ((self?.mostPopularMovieRequest.page ?? 0) + 1)
+                
+                self?.mostPopularMoviesTableView?.setContentOffset(.zero, animated: false)
+                
+                self?.mostPopularMoviesTableView?.reloadData()
             }
         }
     }
     
     func failSearchMostPopularMovies(error: CustomError) {
         
-        if let code = error.code {
-            
-            if code != NSURLErrorCancelled {
-                
-                self.showAlert(error: error, handler: nil)
-            }
-        }
-        else {
-            
-            self.showAlert(error: error, handler: nil)
-        }
+        self.showAlert(error: error, handler: nil)
     }
     
     func didSearchMostPopularMovies() { }
@@ -240,20 +233,20 @@ extension SearchMostPopularMoviesViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        if (searchText.count >= 2) {
-            
+//        if (searchText.count >= 2) {
+        
             self.searchQuery = searchText
             
             self.loadData(query: searchText)
-        }
-        else {
-         
-            self.mostPopularMovieRequest.page = 1
-            
-            self.data?.removeAll()
-            
-            self.mostPopularMoviesTableView?.reloadData()
-        }
+//        }
+//        else {
+//
+//            self.mostPopularMovieRequest.page = 1
+//
+//            self.data?.removeAll()
+//
+//            self.mostPopularMoviesTableView?.reloadData()
+//        }
     }
 }
 

@@ -68,7 +68,17 @@ extension AlertableController {
         
         let model = AlertModel(title: error.title, message: message, actions: [AlertAction(title: "Aceptar", style: .default, action: handler)], preferredStyle: .default)
         
-        self.showAlert(model: model, image: nil, controller: nil)
+        if let code = error.code {
+            
+            if code != NSURLErrorCancelled {
+                
+                self.showAlert(model: model, image: nil, controller: nil)
+            }
+        }
+        else {
+            
+            self.showAlert(model: model, image: nil, controller: nil)
+        }
     }
     
     func showAlert(model: AlertModel, image: UIImage?, controller: UIViewController?) {

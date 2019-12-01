@@ -62,6 +62,11 @@ class RestWebServiceNativeClient: NSObject {
         
         return result
     }
+    
+    deinit {
+        
+        self.networkTasks.removeAll()
+    }
 }
 
 extension RestWebServiceNativeClient: RestWebServiceClient {
