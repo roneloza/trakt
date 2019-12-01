@@ -64,35 +64,37 @@ extension AlertableController {
     
     func showAlert(error: CustomError, handler: (() -> ())?) {
         
-        let model = AlertModel(title: error.title, message: error.message, actions: [AlertAction(title: "Aceptar", style: .default, action: handler)], preferredStyle: .default)
+        let message = "\(error.message ?? "")\(error.code?.description ?? "")"
+        
+        let model = AlertModel(title: error.title, message: message, actions: [AlertAction(title: "Aceptar", style: .default, action: handler)], preferredStyle: .default)
         
         self.showAlert(model: model, image: nil, controller: nil)
     }
     
     func showAlert(model: AlertModel, image: UIImage?, controller: UIViewController?) {
         
-        let alertActions = model.actions?.map { (e) -> PMAlertAction in
-            
-            return PMAlertAction(title: e.title, style: (e.style == AlertActionStyle.default ? PMAlertActionStyle.default : (e.style == AlertActionStyle.cancel ? PMAlertActionStyle.cancel : PMAlertActionStyle.default)), action: (e.action != nil ? {
-                
-                e.action?()
-                
-                } : nil))
-        }
-        
-        let alertVC = PMAlertController(title: model.title, description: model.message, image: image, style: (model.preferredStyle == AlertStyle.default ? PMAlertControllerStyle.alert : (model.preferredStyle == AlertStyle.walkthroughAlert ? PMAlertControllerStyle.walkthrough : PMAlertControllerStyle.alert)))
-        
-        alertActions?.forEach({ (action) in
-            
-            alertVC.addAction(action)
-        })
-        
-//        alertVC.addTextField { (textField) in
-//            textField?.placeholder = "Location..."
-//        }
-        
         self.dispatchOnMainQueue { [weak self] in
-         
+            
+            let alertActions = model.actions?.map { (e) -> PMAlertAction in
+                
+                return PMAlertAction(title: e.title, style: (e.style == AlertActionStyle.default ? PMAlertActionStyle.default : (e.style == AlertActionStyle.cancel ? PMAlertActionStyle.cancel : PMAlertActionStyle.default)), action: (e.action != nil ? {
+                    
+                    e.action?()
+                    
+                    } : nil))
+            }
+            
+            let alertVC = PMAlertController(title: model.title, description: model.message, image: image, style: (model.preferredStyle == AlertStyle.default ? PMAlertControllerStyle.alert : (model.preferredStyle == AlertStyle.walkthroughAlert ? PMAlertControllerStyle.walkthrough : PMAlertControllerStyle.alert)))
+            
+            alertActions?.forEach({ (action) in
+                
+                alertVC.addAction(action)
+            })
+            
+            //        alertVC.addTextField { (textField) in
+            //            textField?.placeholder = "Location..."
+            //        }
+            
             self?.present(alertVC, animated: true, completion: nil)
         }
     }

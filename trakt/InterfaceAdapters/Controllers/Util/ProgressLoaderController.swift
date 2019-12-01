@@ -18,9 +18,9 @@ extension ProgressLoaderController {
     
     func showProgress() {
         
-        SVProgressHUD.setDefaultMaskType(.gradient)
-        
         self.dispatchOnMainQueue {
+            
+            SVProgressHUD.setDefaultMaskType(.gradient)
             
             SVProgressHUD.show()
         }

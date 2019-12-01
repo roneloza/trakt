@@ -70,5 +70,7 @@ extension RestWebServiceRequest {
         }
     }
     
+//    var authorization: [String : String]? { get { return nil } }
+    
     var queryString: [String: String]? { get { return nil } }
 }
