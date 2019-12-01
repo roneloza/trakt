@@ -240,11 +240,19 @@ extension SearchMostPopularMoviesViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        if (searchText.count >= 3) {
+        if (searchText.count >= 2) {
             
             self.searchQuery = searchText
             
             self.loadData(query: searchText)
+        }
+        else {
+         
+            self.mostPopularMovieRequest.page = 1
+            
+            self.data?.removeAll()
+            
+            self.mostPopularMoviesTableView?.reloadData()
         }
     }
 }
