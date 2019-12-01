@@ -29,27 +29,6 @@ protocol MostPopularMoviesUseCaseOutput {
 
 class MostPopularMoviesUseCase: MostPopularMoviesUseCaseInput {
     
-    func paginateMostPopularMovies(request: MostPopularMovieRequest) {
-        
-        self.output?.willPaginateMostPopularMovies()
-        
-        self.repository.getMostPopularMovies(request: request) { (result) in
-            
-            switch result {
-                
-            case .success(let object):
-                
-                self.output?.successPaginateMostPopularMovies(data: object)
-                
-            case .failure(let error):
-                
-                self.output?.failPaginateMostPopularMovies(error: error)
-            }
-            
-            self.output?.didPaginateMostPopularMovies()
-        }
-    }
-    
     internal init(output: MostPopularMoviesUseCaseOutput?) {
         self.output = output
     }
@@ -75,6 +54,27 @@ class MostPopularMoviesUseCase: MostPopularMoviesUseCaseInput {
             }
             
             self.output?.didGetMostPopularMovies()
+        }
+    }
+    
+    func paginateMostPopularMovies(request: MostPopularMovieRequest) {
+        
+        self.output?.willPaginateMostPopularMovies()
+        
+        self.repository.getMostPopularMovies(request: request) { (result) in
+            
+            switch result {
+                
+            case .success(let object):
+                
+                self.output?.successPaginateMostPopularMovies(data: object)
+                
+            case .failure(let error):
+                
+                self.output?.failPaginateMostPopularMovies(error: error)
+            }
+            
+            self.output?.didPaginateMostPopularMovies()
         }
     }
 }

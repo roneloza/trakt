@@ -1,22 +1,20 @@
 //
-//  MovieDetailRequest.swift
+//  MovieVideoRequest.swift
 //  trakt
 //
-//  Created by Lab Positiva Dev on 11/28/19.
+//  Created by roni shender on 11/30/19.
 //  Copyright © 2019 Technious. All rights reserved.
 //
 
 import UIKit
 
-class MovieDetailRestWebServiceRequest: RestWebServiceRequest {
+class MovieVideoRestWebServiceRequest: RestWebServiceRequest {
     
-//    https://api.themoviedb.org/3/movie/259316?api_key=39b1e0b797714dc728457343c5b3e401&language=en-US
-
     let baseUrl: URL? = URL(string: "https://api.themoviedb.org")
     
     var  path: String {
         
-        return "/3/movie/\(self.movieId)"
+        return "/3/movie/\(self.movieId)/videos"
     }
     
     var queryString: [String : String]? {
@@ -33,7 +31,7 @@ class MovieDetailRestWebServiceRequest: RestWebServiceRequest {
     let movieId: Int
 }
 
-class MovieDetailRequest: NSObject {
+class MovieVideoRequest: NSObject {
     
     let movieId: Int
     
@@ -44,6 +42,6 @@ class MovieDetailRequest: NSObject {
     
     lazy var request = {
         
-        return MovieDetailRestWebServiceRequest(movieId: self.movieId)
+        return MovieVideoRestWebServiceRequest(movieId: self.movieId)
     }()
 }

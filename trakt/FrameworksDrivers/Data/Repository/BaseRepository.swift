@@ -8,8 +8,14 @@
 
 import UIKit
 
-class BaseRepository {
+class BaseRepository: RestWebServiceRepository {
 
     var deserialize: SerializerClient = SerializerJSONClient()
     var webServiceClient: RestWebServiceClient = RestWebServiceNativeClient()
+}
+
+protocol RestWebServiceRepository {
+    
+    var deserialize: SerializerClient { get }
+    var webServiceClient: RestWebServiceClient { get }
 }

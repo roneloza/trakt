@@ -8,7 +8,7 @@
 
 import SVProgressHUD
 
-protocol ProgressLoaderController where Self: UIViewController {
+protocol ProgressLoaderController: DispatcherController where Self: UIViewController {
     
     func showProgress()
     func dismissProgress()
@@ -19,11 +19,18 @@ extension ProgressLoaderController {
     func showProgress() {
         
         SVProgressHUD.setDefaultMaskType(.gradient)
-        SVProgressHUD.show()
+        
+        self.dispatchOnMainQueue {
+            
+            SVProgressHUD.show()
+        }
     }
     
     func dismissProgress() {
         
-        SVProgressHUD.dismiss()
+        self.dispatchOnMainQueue {
+         
+            SVProgressHUD.dismiss()
+        }
     }
 }

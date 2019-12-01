@@ -53,7 +53,7 @@ class AlertModel {
     
 }
 
-protocol AlertableController where Self: UIViewController {
+protocol AlertableController: DispatcherController where Self: UIViewController {
     
     func showAlert(error: CustomError, handler: (() -> ())?)
     func showAlert(model: AlertModel, image: UIImage?, controller: UIViewController?)
@@ -66,7 +66,7 @@ extension AlertableController {
         
         let model = AlertModel(title: error.title, message: error.message, actions: [AlertAction(title: "Aceptar", style: .default, action: handler)], preferredStyle: .default)
         
-        self.showAlert(model: model, image: nil, controller: self)
+        self.showAlert(model: model, image: nil, controller: nil)
     }
     
     func showAlert(model: AlertModel, image: UIImage?, controller: UIViewController?) {
@@ -87,11 +87,14 @@ extension AlertableController {
             alertVC.addAction(action)
         })
         
-        alertVC.addTextField { (textField) in
-            textField?.placeholder = "Location..."
-        }
+//        alertVC.addTextField { (textField) in
+//            textField?.placeholder = "Location..."
+//        }
         
-        self.present(alertVC, animated: true, completion: nil)
+        self.dispatchOnMainQueue { [weak self] in
+         
+            self?.present(alertVC, animated: true, completion: nil)
+        }
     }
     
     func showAcceptAlert(title: String, message: String, acceptAction:(() -> ())?, image: UIImage?, controller: UIViewController?) {

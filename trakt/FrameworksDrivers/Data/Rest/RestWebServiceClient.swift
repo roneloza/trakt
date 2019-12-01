@@ -8,13 +8,23 @@
 
 import Foundation
 
+typealias ServiceIdentifier = Int
+
 protocol RestWebServiceClient: class {
     
-    func GET(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void)
+    func get(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask
     
-    func POST(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void)
+    func post(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask
     
-    func PUT(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void)
+    func put(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask
     
-    func PATCH(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void)
+    func patch(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask
+    
+    func cancel(task: NetworkTask)
+    
+    func appendNetworkTask(element: NetworkTask)
+    
+    var allNetworkTask: [NetworkTask] { get }
+    
+    var lastNetworkTask: NetworkTask? { get }
 }

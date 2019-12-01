@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Most popular movies-->
+        <!--Most Popular Movies-->
         <scene sceneID="OHL-4t-H9Q">
             <objects>
                 <viewController storyboardIdentifier="MostPopularMoviesViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="to6-61-sIP" customClass="MostPopularMoviesViewController" customModule="trakt" customModuleProvider="target" sceneMemberID="viewController">
@@ -33,32 +33,47 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LQY-H2-kI2">
-                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="399.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="382"/>
                                                             <subviews>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P5H-zE-7xy">
-                                                                    <rect key="frame" x="8" y="8" width="398" height="383.5"/>
+                                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P5H-zE-7xy">
+                                                                    <rect key="frame" x="8" y="8" width="398" height="366"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lfu-mZ-a2o">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="383.5"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="750"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="750" id="gLN-FR-KWi"/>
+                                                                            </constraints>
                                                                         </imageView>
-                                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Xj-i7-LtT">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="383.5"/>
+                                                                        <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Xj-i7-LtT">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="366"/>
+                                                                            <subviews>
+                                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="linear_gradient_top_detail" translatesAutoresizingMaskIntoConstraints="NO" id="Z85-MU-apa">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="366"/>
+                                                                                </imageView>
+                                                                            </subviews>
+                                                                            <color key="backgroundColor" white="0.0" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <constraints>
+                                                                                <constraint firstItem="Z85-MU-apa" firstAttribute="leading" secondItem="5Xj-i7-LtT" secondAttribute="leading" id="bZj-sT-Hy2"/>
+                                                                                <constraint firstAttribute="trailing" secondItem="Z85-MU-apa" secondAttribute="trailing" id="fsa-16-9Sa"/>
+                                                                                <constraint firstAttribute="bottom" secondItem="Z85-MU-apa" secondAttribute="bottom" id="jS4-ik-p3H"/>
+                                                                                <constraint firstItem="Z85-MU-apa" firstAttribute="top" secondItem="5Xj-i7-LtT" secondAttribute="top" id="yYp-Zu-EEO"/>
+                                                                            </constraints>
                                                                         </view>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="The Dark Knight" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4S-O49">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="398" height="36"/>
+                                                                            <rect key="frame" x="8" y="0.0" width="382" height="36"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T8r-ZC-Cfl">
-                                                                            <rect key="frame" x="0.0" y="222.5" width="398" height="153"/>
+                                                                            <rect key="frame" x="8" y="175" width="382" height="183"/>
                                                                             <string key="text">Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the streets. The partnership proves to be effective, but they soon find themselves prey to a reign of chaos unleashed by a rising criminal mastermind known to the terrified citizens of Gotham as the Joker.</string>
-                                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="(2008)" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxx-vs-cgj">
-                                                                            <rect key="frame" x="0.0" y="44" width="398" height="36"/>
+                                                                            <rect key="frame" x="8" y="44" width="382" height="36"/>
                                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <nil key="highlightedColor"/>
@@ -69,23 +84,27 @@
                                                                         <constraint firstAttribute="trailing" secondItem="Lfu-mZ-a2o" secondAttribute="trailing" id="38w-Zl-JtN"/>
                                                                         <constraint firstItem="5Xj-i7-LtT" firstAttribute="top" secondItem="P5H-zE-7xy" secondAttribute="top" id="4sU-O3-r9f"/>
                                                                         <constraint firstItem="kxx-vs-cgj" firstAttribute="top" secondItem="y77-4S-O49" secondAttribute="bottom" constant="8" id="ElZ-4C-0W3"/>
-                                                                        <constraint firstItem="kxx-vs-cgj" firstAttribute="leading" secondItem="P5H-zE-7xy" secondAttribute="leading" id="Gw5-4k-DUb"/>
+                                                                        <constraint firstItem="kxx-vs-cgj" firstAttribute="leading" secondItem="P5H-zE-7xy" secondAttribute="leading" constant="8" id="Gw5-4k-DUb"/>
                                                                         <constraint firstAttribute="bottom" secondItem="Lfu-mZ-a2o" secondAttribute="bottom" id="MZv-Ri-tID"/>
-                                                                        <constraint firstItem="T8r-ZC-Cfl" firstAttribute="leading" secondItem="P5H-zE-7xy" secondAttribute="leading" id="PI1-gk-pMv"/>
-                                                                        <constraint firstAttribute="height" constant="383.5" id="Pbb-YI-GH9"/>
+                                                                        <constraint firstItem="T8r-ZC-Cfl" firstAttribute="leading" secondItem="P5H-zE-7xy" secondAttribute="leading" constant="8" id="PI1-gk-pMv"/>
                                                                         <constraint firstItem="Lfu-mZ-a2o" firstAttribute="top" secondItem="P5H-zE-7xy" secondAttribute="top" id="S6X-CJ-m8U"/>
                                                                         <constraint firstItem="5Xj-i7-LtT" firstAttribute="leading" secondItem="P5H-zE-7xy" secondAttribute="leading" id="Ugi-ZD-kcj"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="T8r-ZC-Cfl" secondAttribute="trailing" id="ZME-ub-13h"/>
-                                                                        <constraint firstItem="y77-4S-O49" firstAttribute="leading" secondItem="P5H-zE-7xy" secondAttribute="leading" id="c8S-lU-lv7"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="T8r-ZC-Cfl" secondAttribute="trailing" constant="8" id="ZME-ub-13h"/>
+                                                                        <constraint firstItem="y77-4S-O49" firstAttribute="leading" secondItem="P5H-zE-7xy" secondAttribute="leading" constant="8" id="c8S-lU-lv7"/>
                                                                         <constraint firstItem="T8r-ZC-Cfl" firstAttribute="height" relation="lessThanOrEqual" secondItem="P5H-zE-7xy" secondAttribute="height" multiplier="0.5" id="c8c-3i-rDi"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="y77-4S-O49" secondAttribute="trailing" id="eeO-YI-YmX"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="y77-4S-O49" secondAttribute="trailing" constant="8" id="eeO-YI-YmX"/>
                                                                         <constraint firstItem="y77-4S-O49" firstAttribute="top" secondItem="P5H-zE-7xy" secondAttribute="top" id="egu-bI-818"/>
                                                                         <constraint firstAttribute="trailing" secondItem="5Xj-i7-LtT" secondAttribute="trailing" id="iJs-zQ-OXP"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="kxx-vs-cgj" secondAttribute="trailing" id="kyh-sW-cGo"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="kxx-vs-cgj" secondAttribute="trailing" constant="8" id="kyh-sW-cGo"/>
                                                                         <constraint firstAttribute="bottom" secondItem="T8r-ZC-Cfl" secondAttribute="bottom" constant="8" id="ozt-gK-GMl"/>
                                                                         <constraint firstAttribute="bottom" secondItem="5Xj-i7-LtT" secondAttribute="bottom" id="rhx-I2-9vQ"/>
                                                                         <constraint firstItem="Lfu-mZ-a2o" firstAttribute="leading" secondItem="P5H-zE-7xy" secondAttribute="leading" id="wBN-US-O6N"/>
                                                                     </constraints>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                            <integer key="value" value="8"/>
+                                                                        </userDefinedRuntimeAttribute>
+                                                                    </userDefinedRuntimeAttributes>
                                                                 </view>
                                                             </subviews>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -107,7 +126,6 @@
                                                 <connections>
                                                     <outlet property="overviewLabel" destination="T8r-ZC-Cfl" id="hXP-jq-v0c"/>
                                                     <outlet property="posterImageView" destination="Lfu-mZ-a2o" id="BT6-hQ-8H8"/>
-                                                    <outlet property="shadowView" destination="5Xj-i7-LtT" id="fBA-Bh-crf"/>
                                                     <outlet property="titleLabel" destination="y77-4S-O49" id="rx9-tq-3FW"/>
                                                     <outlet property="yearOfReleaseLabel" destination="kxx-vs-cgj" id="XRb-Un-90x"/>
                                                 </connections>
@@ -137,7 +155,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PXa-Sx-Yuk"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Most popular movies" id="J5E-iH-3iL"/>
+                    <navigationItem key="navigationItem" title="Most Popular Movies" id="J5E-iH-3iL"/>
                     <connections>
                         <outlet property="mostPopularMoviesTableView" destination="9gY-Kd-0Qa" id="c9v-Zp-OlR"/>
                     </connections>
@@ -166,4 +184,7 @@
             <point key="canvasLocation" x="-288" y="-287"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="linear_gradient_top_detail" width="320" height="320"/>
+    </resources>
 </document>

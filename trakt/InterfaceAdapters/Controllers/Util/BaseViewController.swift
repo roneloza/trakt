@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import XCDYouTubeKit
+import AVKit
 
 class BaseViewController: UIViewController {
 
@@ -70,15 +72,27 @@ class BaseViewController: UIViewController {
         }
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    //MARK: - UI -
+    
+    func playVideo(key: String) {
+        
+        let playerViewController = AVPlayerViewController()
+        
+        self.present(playerViewController, animated: true, completion: nil)
+        
+        XCDYouTubeClient.default().getVideoWithIdentifier(key) { (video, error) in
+            
+            if let streamURL = video?.streamURLs[XCDYouTubeVideoQuality.HD720.rawValue] {
+                
+                playerViewController.player = AVPlayer(url: streamURL)
+                playerViewController.player?.play()
+            }
+            else {
+                
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
-    */
     
     deinit {
         print("deinit %@", self)

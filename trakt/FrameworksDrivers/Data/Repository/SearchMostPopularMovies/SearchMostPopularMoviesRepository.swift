@@ -1,21 +1,21 @@
 //
-//  ReserveListRepository.swift
-//  ColturViajes
+//  SearchMostPopularMoviesRepository.swift
+//  trakt
 //
-//  Created by roni shender on 11/24/19.
-//  Copyright © 2019 ENFASYS Consultores e Ingenieros. All rights reserved.
+//  Created by roni shender on 11/30/19.
+//  Copyright © 2019 Technious. All rights reserved.
 //
 
 import UIKit
 
-protocol MostPopularMoviesRepository: RestWebServiceRepository {
+protocol SearchMostPopularMoviesRepository: RestWebServiceRepository {
     
-    func getMostPopularMovies(request: MostPopularMovieRequest, completion: @escaping (Result<[MostPopularMovieResponse]?, CustomError>) -> Void)
+    func searchMostPopularMovies(request: MostPopularMovieRequest, completion: @escaping (Result<[MostPopularMovieResponse]?, CustomError>) -> Void)
 }
 
-class MostPopularMoviesRepositoryRestWebService: BaseRepository, MostPopularMoviesRepository {
-
-    func getMostPopularMovies(request: MostPopularMovieRequest, completion: @escaping (Result<[MostPopularMovieResponse]?, CustomError>) -> Void) {
+class SearchMostPopularMoviesRepositoryRestWebService: BaseRepository, SearchMostPopularMoviesRepository {
+    
+    func searchMostPopularMovies(request: MostPopularMovieRequest, completion: @escaping (Result<[MostPopularMovieResponse]?, CustomError>) -> Void) {
         
         let _ = self.webServiceClient.get(request: request.request) { (result) in
             

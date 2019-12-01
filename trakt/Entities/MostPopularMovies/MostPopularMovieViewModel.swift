@@ -29,4 +29,6 @@ class MostPopularMovieViewModel: NSObject {
     
     var overview: String?
     var posterUrl: String?
+    
+    var hasAdditionalData: Bool = false
 }

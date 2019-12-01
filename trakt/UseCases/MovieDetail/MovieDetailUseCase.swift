@@ -40,7 +40,7 @@ class MovieDetailUseCase: MovieDetailUseCaseInput {
                 
             case .success(let object):
                 
-                modelView?.posterUrl = "https://image.tmdb.org/t/p/w342/\(object?.posterPath ?? "")"
+                modelView?.posterUrl = "https://image.tmdb.org/t/p/w500/\(object?.posterPath ?? "")"
                 modelView?.overview = object?.overview
                 
                 self.output?.successMovieDetail(modelView: modelView)

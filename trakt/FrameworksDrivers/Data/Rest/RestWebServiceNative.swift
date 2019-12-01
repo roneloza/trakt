@@ -9,85 +9,186 @@
 import UIKit
 //import Alamofire
 
-class RestWebServiceNativeClient: RestWebServiceClient {
+extension RestWebServiceNativeClient: URLSessionTaskDelegate {
     
-    private func REQUEST(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         
-        guard let url = request.url,
-        var urlComps = URLComponents(string: url.absoluteString)
-            else { return completion(.failure(RestWebServiceError(title: "RestWebServiceError", message: "", code: RestWebServiceStatusCode.malformedUrl.rawValue)))}
-        
-        var queryItems: [URLQueryItem] = [URLQueryItem]()
-        
-        request.queryString?.forEach({ (keyValue) in
+        if let error = error {
             
-            queryItems.append(URLQueryItem(name: keyValue.key, value: keyValue.value))
-        })
+            NSLog("error : \(error)")
+        }
+    }
+}
+
+class RestWebServiceNativeClient: NSObject {
+    
+    private let concurrenQueue = DispatchQueue(label: "com.trakt.RestWebServiceNativeClient", qos: .utility, attributes: .concurrent)
+    
+    private lazy var session: URLSession = {
         
-        urlComps.queryItems = queryItems
+        return URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+    }()
+    
+    private var networkTasks: [NetworkTask] = []
+    
+    func appendNetworkTask(element: NetworkTask) {
         
-        var urlRequest = URLRequest(url: urlComps.url!)
+        self.concurrenQueue.async(flags: .barrier) {
+           
+            self.networkTasks.append(element)
+        }
+    }
+    
+    var allNetworkTask: [NetworkTask] {
         
-        urlRequest.httpMethod = request.method.rawValue
+        var result = [NetworkTask]()
         
-        switch request.contentType {
-        case .json:
+        self.concurrenQueue.sync {
             
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-            
-        default:
-            ()
+            result = self.networkTasks
         }
         
-        request.headers?.forEach({ (keyValue) in
-            
-            urlRequest.setValue(keyValue.value, forHTTPHeaderField: keyValue.key)
-        })
+        return result
+    }
+    
+    var lastNetworkTask: NetworkTask? {
         
-        request.authorization?.forEach({ (keyValue) in
-            
-            urlRequest.setValue(keyValue.value, forHTTPHeaderField: keyValue.key)
-        })
+        var result: NetworkTask?
         
-        if let parameters = request.parameters {
+        self.concurrenQueue.sync {
             
-            urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+            result = self.networkTasks.last
         }
         
-        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+        return result
+    }
+}
+
+extension RestWebServiceNativeClient: RestWebServiceClient {
+    
+    func cancel(task: NetworkTask) {
+        
+        task.cancel()
+    }
+    
+    private func REQUEST(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask {
+        
+        let backgroundTaskID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+        
+        let networkTask = NativeNetworkTask()
+        
+        //        self.queue.async {
+        
+        if let url = request.url,
+            var urlComps = URLComponents(string: url.absoluteString) {
             
-            let httpResponse = (response as! HTTPURLResponse)
+            var queryItems: [URLQueryItem] = [URLQueryItem]()
             
-            if (RestWebServiceStatusCode.ok.rawValue ..< RestWebServiceStatusCode.multipleChoices.rawValue) ~= httpResponse.statusCode {
+            request.queryString?.forEach({ (keyValue) in
                 
-                completion(.success(data))
-            }
-            else {
+                queryItems.append(URLQueryItem(name: keyValue.key, value: keyValue.value))
+            })
+            
+            urlComps.queryItems = queryItems
+            
+            var urlRequest = URLRequest(url: urlComps.url!)
+            
+            urlRequest.httpMethod = request.method.rawValue
+            
+            switch request.contentType {
+            case .json:
                 
-                completion(.failure(RestWebServiceError(title: "RestWebServiceError", message: error?.localizedDescription, code: httpResponse.statusCode, data: data)))
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+                
+            default:
+                ()
             }
-            }.resume()
-    }
-    
-    func GET(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) {
+            
+            request.headers?.forEach({ (keyValue) in
+                
+                urlRequest.setValue(keyValue.value, forHTTPHeaderField: keyValue.key)
+            })
+            
+            request.authorization?.forEach({ (keyValue) in
+                
+                urlRequest.setValue(keyValue.value, forHTTPHeaderField: keyValue.key)
+            })
+            
+            if let parameters = request.parameters {
+                
+                urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+            }
+            
+            NSLog("\(urlRequest)")
+            
+            let task: URLSessionDataTask = self.session.dataTask(with: urlRequest) { (data, response, error) in
+                
+                let result: Result<Data?, CustomError>
+                
+                if let httpResponse = (response as? HTTPURLResponse) {
+                 
+                    if (RestWebServiceStatusCode.ok.rawValue ..< RestWebServiceStatusCode.multipleChoices.rawValue) ~= httpResponse.statusCode {
+                        
+                        result = .success(data)
+                    }
+                    else {
+                        
+                        result = .failure(RestWebServiceError(title: "RestWebServiceError", message: error?.localizedDescription, code: httpResponse.statusCode, data: data))
+                    }
+                }
+                else {
+                  
+                    if let error = error as NSError? {
+                     
+                        result = .failure(RestWebServiceError(title: "RestWebServiceError", message: error.localizedDescription, code: error.code, data: data))
+                    }
+                    else {
+                        
+                        result = .failure(RestWebServiceError(title: "RestWebServiceError", message: error?.localizedDescription, code: CustomErrorEnum.responseIsEmpty.rawValue, data: data))
+                    }
+                }
+                
+                completion(result)
+                
+                UIApplication.shared.endBackgroundTask(backgroundTaskID)
+            }
+            
+            task.resume()
+            
+            networkTask.set(task)
+        }
+        else {
+            
+            completion(.failure(RestWebServiceError(title: "RestWebServiceError", message: "", code: RestWebServiceStatusCode.malformedUrl.rawValue)))
+            
+            UIApplication.shared.endBackgroundTask(backgroundTaskID)
+        }
         
-        self.REQUEST(request: request, completion: completion)
-    }
-    
-    func POST(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) {
+        //        }
         
-        self.REQUEST(request: request, completion: completion)
-    }
-    
-    func PUT(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) {
+        self.appendNetworkTask(element: networkTask)
         
-        self.REQUEST(request: request, completion: completion)
+        return networkTask
     }
     
-    func PATCH(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) {
+    func get(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask {
         
-        self.REQUEST(request: request, completion: completion)
+        return self.REQUEST(request: request, completion: completion)
     }
     
+    func post(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask {
+        
+        return self.REQUEST(request: request, completion: completion)
+    }
+    
+    func put(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask {
+        
+        return self.REQUEST(request: request, completion: completion)
+    }
+    
+    func patch(request: RestWebServiceRequest, completion: @escaping (Result<Data?, CustomError>) -> Void) -> NetworkTask {
+        
+        return self.REQUEST(request: request, completion: completion)
+    }
 }

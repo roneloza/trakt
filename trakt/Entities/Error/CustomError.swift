@@ -9,6 +9,9 @@
 import Foundation
 
 enum CustomErrorEnum: Int {
+    
+    case unknown  = 5000
+    case responseIsEmpty = 3000
     case dataIsEmpty = 2000
 }
 

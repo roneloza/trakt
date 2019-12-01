@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol MovieDetailRepository: class {
+protocol MovieDetailRepository: RestWebServiceRepository {
     
     func getMovieDetail(request: MovieDetailRequest, completion: @escaping (Result<MovieDetailResponse?, CustomError>) -> Void)
 }
@@ -17,7 +17,7 @@ class MovieDetailRepositoryRestWebService: BaseRepository, MovieDetailRepository
     
     func getMovieDetail(request: MovieDetailRequest, completion: @escaping (Result<MovieDetailResponse?, CustomError>) -> Void) {
         
-        self.webServiceClient.GET(request: request.request) { (result) in
+        let _ = self.webServiceClient.get(request: request.request) { (result) in
             
             switch result {
                 

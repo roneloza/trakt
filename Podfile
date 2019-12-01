@@ -11,6 +11,7 @@ target 'trakt' do
   pod 'SVProgressHUD'
   pod 'PMAlertController'
   pod 'SDWebImage'
+  pod 'XCDYouTubeKit'
 
   target 'traktTests' do
     inherit! :search_paths

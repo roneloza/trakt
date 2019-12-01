@@ -18,13 +18,15 @@ class SearchMostPopularMoviesViewController: BaseViewController, ProgressLoaderC
     private var searchActive : Bool = false
     private var searchQuery : String = ""
     
-    private lazy var mostPopularMoviesUseCase : MostPopularMoviesUseCaseInput = MostPopularMoviesUseCase(output: self.mostPopularMoviesPresenter)
+    private lazy var useCase : SearchMostPopularMoviesUseCaseInput = SearchMostPopularMoviesUseCase(output: self.presenter)
     
-    private lazy var mostPopularMoviesPresenter: MostPopularMoviesPresenterInput = MostPopularMoviesPresenter(output: self)
+    private lazy var presenter: SearchMostPopularMoviesPresenterInput = SearchMostPopularMoviesPresenter(output: self)
     
     private lazy var mostPopularMovieRequest = MostPopularMovieRequest(page: 1)
     
     private lazy var movieDetailUseCase : MovieDetailUseCaseInput = MovieDetailUseCase(output: self)
+    
+    private lazy var movieVideoUseCase : MovieVideoUseCaseInput = MovieVideoUseCase(output: self)
     
     override var navigationBarHidden: Bool {
         
@@ -46,7 +48,7 @@ class SearchMostPopularMoviesViewController: BaseViewController, ProgressLoaderC
     
     func setupTableView() {
         
-        self.mostPopularMoviesTableView?.estimatedRowHeight = 400
+        self.mostPopularMoviesTableView?.estimatedRowHeight = 750
         self.mostPopularMoviesTableView?.rowHeight = UITableView.automaticDimension
     }
     
@@ -56,7 +58,7 @@ class SearchMostPopularMoviesViewController: BaseViewController, ProgressLoaderC
         
         self.mostPopularMovieRequest.page = 1
         self.mostPopularMovieRequest.query = query
-        self.mostPopularMoviesUseCase.getMostPopularMovies(request: self.mostPopularMovieRequest)
+        self.useCase.searchMostPopularMovies(request: self.mostPopularMovieRequest)
     }
 }
 
@@ -97,24 +99,35 @@ extension SearchMostPopularMoviesViewController: UITableViewDataSource, UITableV
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        if indexPath.row == ((self.data?.count ?? 0) - 1) && (self.data?.count ?? 0) >= 10 {
+        let item = self.data?[indexPath.row]
+        
+        if indexPath.row == ((self.data?.count ?? 0) - 1) &&
+            (self.data?.count ?? 0) >= 10 &&
+            !(item?.hasAdditionalData ?? false) {
             
-            self.mostPopularMoviesUseCase.paginateMostPopularMovies(request: self.mostPopularMovieRequest)
+            self.useCase.paginateSearchMostPopularMovies(request: self.mostPopularMovieRequest)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if let item = self.data?[indexPath.row],
+            let tmdb = item.tmdb {
+            
+            self.movieVideoUseCase.getMovieVideo(request: MovieVideoRequest(movieId: tmdb))
         }
     }
 }
 
-extension SearchMostPopularMoviesViewController: MostPopularMoviesPresenterOutput {
+// MARK: - SearchMostPopularMoviesPresenterOutput -
+extension SearchMostPopularMoviesViewController: SearchMostPopularMoviesPresenterOutput {
     
-    func willPaginateMostPopularMovies() {
+    func willPaginateSearchMostPopularMovies() {
         
-        self.dispatchOnMainQueue { [weak self] in
-            
-            self?.showProgress()
-        }
+        self.showProgress()
     }
     
-    func successPaginateMostPopularMovies(data: [MostPopularMovieViewModel]?) {
+    func successPaginateSearchMostPopularMovies(data: [MostPopularMovieViewModel]?) {
         
         self.dispatchOnMainQueue {  [weak self] in
             
@@ -129,31 +142,19 @@ extension SearchMostPopularMoviesViewController: MostPopularMoviesPresenterOutpu
         }
     }
     
-    func failPaginateMostPopularMovies(error: CustomError) {
+    func failPaginateSearchMostPopularMovies(error: CustomError) {
         
-        self.dispatchOnMainQueue {  [weak self] in
-            
-            self?.showAlert(error: error, handler: nil)
-        }
+        self.showAlert(error: error, handler: nil)
     }
     
-    func didPaginateMostPopularMovies() {
+    func didPaginateSearchMostPopularMovies() {
         
-        self.dispatchOnMainQueue {  [weak self] in
-            
-            self?.dismissProgress()
-        }
+        self.dismissProgress()
     }
     
-    func willGetMostPopularMovies() {
-        
-        self.dispatchOnMainQueue { [weak self] in
-            
-            self?.showProgress()
-        }
-    }
+    func willSearchMostPopularMovies() { }
     
-    func successGetMostPopularMovies(data: [MostPopularMovieViewModel]?) {
+    func successSearchMostPopularMovies(data: [MostPopularMovieViewModel]?) {
         
         self.dispatchOnMainQueue {  [weak self] in
             
@@ -168,29 +169,29 @@ extension SearchMostPopularMoviesViewController: MostPopularMoviesPresenterOutpu
         }
     }
     
-    func failGetMostPopularMovies(error: CustomError) {
+    func failSearchMostPopularMovies(error: CustomError) {
         
-        self.dispatchOnMainQueue {  [weak self] in
+        if let code = error.code {
             
-            self?.showAlert(error: error, handler: nil)
+            if code != NSURLErrorCancelled {
+                
+                self.showAlert(error: error, handler: nil)
+            }
+        }
+        else {
+            
+            self.showAlert(error: error, handler: nil)
         }
     }
     
-    func didGetMostPopularMovies() {
-        
-        self.dispatchOnMainQueue {  [weak self] in
-            
-            self?.dismissProgress()
-        }
-    }
+    func didSearchMostPopularMovies() { }
     
 }
 
+// MARK: - MovieDetailUseCaseOutput -
 extension SearchMostPopularMoviesViewController: MovieDetailUseCaseOutput {
     
-    func willGetMovieDetail() {
-        
-    }
+    func willGetMovieDetail() { }
     
     func successMovieDetail(modelView: MostPopularMovieViewModel?) {
         
@@ -200,23 +201,21 @@ extension SearchMostPopularMoviesViewController: MovieDetailUseCaseOutput {
                 let index = self?.data?.firstIndex(of: modelView)
                 else { return }
             
+            modelView.hasAdditionalData = true
+            
             self?.mostPopularMoviesTableView?.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
         }
     }
     
     func failGetMovieDetail(error: CustomError) {
         
-        self.dispatchOnMainQueue {  [weak self] in
-            
-            self?.showAlert(error: error, handler: nil)
-        }
+        self.showAlert(error: error, handler: nil)
     }
     
-    func didGetMovieDetail() {
-        
-    }
+    func didGetMovieDetail() { }
 }
 
+// MARK: - UISearchBarDelegate -
 extension SearchMostPopularMoviesViewController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -248,4 +247,35 @@ extension SearchMostPopularMoviesViewController: UISearchBarDelegate {
             self.loadData(query: searchText)
         }
     }
+}
+
+// MARK: - UMovieVideoUseCaseOutput -
+extension SearchMostPopularMoviesViewController: MovieVideoUseCaseOutput {
+    
+    func willGetMovieVideo() {
+        
+        self.showProgress()
+    }
+    
+    func successGetMovieVideo(movieUrl: String?, key: String?) {
+        
+        if let key = key {
+            
+            self.dispatchOnMainQueue { [weak self] in
+                
+                self?.playVideo(key: key)
+            }
+        }
+    }
+    
+    func failGetMovieVideo(error: CustomError) {
+        
+        self.showAlert(error: error, handler: nil)
+    }
+    
+    func didGetMovieVideo() {
+        
+        self.dismissProgress()
+    }
+    
 }
